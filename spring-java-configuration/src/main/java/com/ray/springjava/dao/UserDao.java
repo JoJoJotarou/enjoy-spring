@@ -1,0 +1,36 @@
+package com.ray.springjava.dao;
+
+import com.ray.springjava.entity.User;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.util.List;
+
+public class UserDao {
+    private final JdbcTemplate jdbcTemplate;
+
+    public UserDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public List<User> getAll() {
+        String sql = """
+                select * from user order by id desc limit 10
+                """;
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            User user = new User();
+            user.setId(rs.getInt("id"));
+            user.setName(rs.getString("name"));
+            user.setAge(rs.getInt("age"));
+            user.setBirthday(rs.getDate("birthday"));
+            user.setGender(User.Gender.valueOf(rs.getString("gender")));
+            return user;
+        });
+    }
+
+    public void save(User user) {
+        String sql = """
+                insert into user (name, age, birthday, gender) values (?, ?, ?, ?)
+                """;
+        jdbcTemplate.update(sql, user.getName(), user.getAge(), user.getBirthday(), user.getGender().name());
+    }
+}
