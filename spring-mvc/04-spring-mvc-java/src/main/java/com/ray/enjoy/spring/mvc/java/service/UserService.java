@@ -1,7 +1,7 @@
-package com.ray.enjoy.spring.mvc.xmlandcomponentscan.service;
+package com.ray.enjoy.spring.mvc.java.service;
 
-import com.ray.enjoy.spring.mvc.xmlandcomponentscan.dao.UserDao;
-import com.ray.enjoy.spring.mvc.xmlandcomponentscan.entity.User;
+import com.ray.enjoy.spring.mvc.java.dao.UserDao;
+import com.ray.enjoy.spring.mvc.java.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

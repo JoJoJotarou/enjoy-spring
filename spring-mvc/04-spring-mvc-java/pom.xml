@@ -9,13 +9,15 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>02-spring-mvc-xml</artifactId>
     <packaging>war</packaging>
+
+    <artifactId>04-spring-mvc-java</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aspects</artifactId>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

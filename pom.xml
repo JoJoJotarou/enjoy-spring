@@ -21,10 +21,7 @@
     <modules>
         <module>spring-http-cache</module>
         <module>spring-source</module>
-        <module>spring-xml-configuration</module>
         <module>spring-auto-configuration</module>
-        <module>spring-java-configuration</module>
-        <module>untitled</module>
         <module>spring-mvc</module>
     </modules>
 

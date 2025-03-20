@@ -37,13 +37,15 @@
     <!-- 配置事务通知 -->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
-            <tx:method name="*" propagation="REQUIRED" />
+            <tx:method name="add*" propagation="REQUIRED" />
         </tx:attributes>
     </tx:advice>
 
     <!-- 配置 AOP 切面 -->
     <aop:config>
-        <aop:pointcut id="transactionPointcut" expression="execution(* com.enjoy.spring.mvc.xml.*(..))" />
+        <aop:pointcut id="transactionPointcut"
+                      expression="execution(* com.ray.enjoy.spring.mvc.xml.service.UserService.*(..))" />
+        <!-- 意思：com.ray.enjoy.spring.mvc.xml.service.UserService#add* 方法开启事务 -->
         <aop:advisor pointcut-ref="transactionPointcut" advice-ref="txAdvice" />
     </aop:config>
 

@@ -3,7 +3,7 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/context
@@ -13,20 +13,18 @@
                            http://www.springframework.org/schema/jdbc
                            http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
                            http://www.springframework.org/schema/tx
-                           http://www.springframework.org/schema/tx/spring-tx.xsd">
-
-    <!-- 开启注解扫描，如 @Component, @Repository, @Service, @Controller, @RestController, @ControllerAdvice, and @Configuration -->
-    <context:component-scan base-package="com.ray.enjoy.spring.mvc.xmlandcomponentscan" />
+                           http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/aop
+                           https://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!-- 开启 mvc 支持，例如序列化反序列化 -->
     <mvc:annotation-driven />
 
-    <!-- 配置数据源 -->
     <jdbc:embedded-database id="dataSource" generate-name="true" type="H2">
         <jdbc:script location="classpath:h2/data.sql" />
     </jdbc:embedded-database>
 
-    <!-- JdbcTemplate  -->
+    <!-- JdbcTemplate 配置 -->
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource" />
     </bean>
@@ -36,7 +34,30 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-    <!-- 启用事务注解支持 -->
-    <tx:annotation-driven transaction-manager="transactionManager" />
+    <!-- 配置事务通知 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED" />
+        </tx:attributes>
+    </tx:advice>
 
+    <!-- 配置 AOP 切面 -->
+    <aop:config>
+        <aop:pointcut id="transactionPointcut"
+                      expression="execution(* com.ray.enjoy.spring.mvc.servlet.service.UserService.*(..))" />
+        <!-- 意思：com.ray.enjoy.spring.mvc.xml.service.UserService#add* 方法开启事务 -->
+        <aop:advisor pointcut-ref="transactionPointcut" advice-ref="txAdvice" />
+    </aop:config>
+
+    <bean id="userDao" class="com.ray.enjoy.spring.mvc.servlet.dao.UserDao">
+        <constructor-arg name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+
+    <bean id="userService" class="com.ray.enjoy.spring.mvc.servlet.service.UserService">
+        <constructor-arg name="userDao" ref="userDao" />
+    </bean>
+
+    <bean id="userController" class="com.ray.enjoy.spring.mvc.servlet.controller.UserController">
+        <constructor-arg name="userService" ref="userService" />
+    </bean>
 </beans>

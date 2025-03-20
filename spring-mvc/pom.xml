@@ -17,6 +17,7 @@
         <module>01-spring-servlet</module>
         <module>02-spring-mvc-xml</module>
         <module>03-spring-mvc-xml-and-component-scan</module>
+        <module>04-spring-mvc-java</module>
     </modules>
 
     <dependencies>
@@ -30,6 +31,7 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
+        <!-- web 请求及响应的序列化与反序列化 -->
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jdbc</artifactId>

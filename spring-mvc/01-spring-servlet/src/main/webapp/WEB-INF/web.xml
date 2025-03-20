@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                             http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <servlet>
+        <servlet-name>greetingServlet</servlet-name>
+        <servlet-class>com.ray.enjoy.spring.mvc.servlet.GreetingServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>greetingServlet</servlet-name>
+        <url-pattern>/greeting</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>greetingFilter</filter-name>
+        <filter-class>com.ray.enjoy.spring.mvc.servlet.GreetingFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>greetingFilter</filter-name>
+        <url-pattern>/greeting</url-pattern>
+    </filter-mapping>
+</web-app>

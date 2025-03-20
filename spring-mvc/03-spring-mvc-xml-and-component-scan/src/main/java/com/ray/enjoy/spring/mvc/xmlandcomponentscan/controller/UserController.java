@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("add")
-    public void add(@RequestParam(required = false, name = "rollback") Boolean rollback) {
+    public void add(@RequestParam(required = false, name = "rollback") boolean rollback) {
         userService.add(new User("张三", 18, new Date(), User.Gender.MALE), rollback);
     }
 }

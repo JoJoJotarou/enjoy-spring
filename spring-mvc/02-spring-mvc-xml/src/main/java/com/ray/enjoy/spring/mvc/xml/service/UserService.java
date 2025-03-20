@@ -17,7 +17,7 @@ public class UserService {
         return userDao.getAll();
     }
 
-    public void add(User user, Boolean rollback) {
+    public void add(User user, boolean rollback) {
         userDao.save(user);
 
         if (rollback)
