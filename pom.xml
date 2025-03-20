@@ -23,6 +23,7 @@
         <module>spring-source</module>
         <module>spring-auto-configuration</module>
         <module>spring-mvc</module>
+        <module>spring-boot</module>
     </modules>
 
     <properties>

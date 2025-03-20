@@ -31,7 +31,7 @@ org.springframework.web.SpringServletContainerInitializer
 
 ### AnnotationConfigWebApplicationContext 创建
 
-根据 `SpringServletContainerInitializer` 会调用 `WebConfig` 父类 `AbstractDispatcherServletInitializer` 的 `onStartup`
+`SpringServletContainerInitializer` 会调用 `WebConfig` 父类 `AbstractDispatcherServletInitializer` 的 `onStartup`
 方法。
 
 ```java
@@ -39,6 +39,7 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 
     public static final String DEFAULT_SERVLET_NAME = "dispatcher";
 
+    // WebApplicationInitializer#onStartup 被 SpringServletContainerInitializer 调用
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         super.onStartup(servletContext);
@@ -49,9 +50,11 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
         String servletName = getServletName();
         Assert.hasLength(servletName, "getServletName() must not return null or empty");
 
+        // 创建 WebApplicationContext
         WebApplicationContext servletAppContext = createServletApplicationContext();
         Assert.notNull(servletAppContext, "createServletApplicationContext() must not return null");
 
+        // 创建 DispatcherServlet
         FrameworkServlet dispatcherServlet = createDispatcherServlet(servletAppContext);
         Assert.notNull(dispatcherServlet, "createDispatcherServlet(WebApplicationContext) must not return null");
         dispatcherServlet.setContextInitializers(getServletApplicationContextInitializers());
@@ -94,7 +97,7 @@ public abstract class AbstractAnnotationConfigDispatcherServletInitializer
 
 查找引用，通过
 `org.springframework.context.annotation.AnnotationConfigUtils#registerAnnotationConfigProcessors(org.springframework.beans.factory.support.BeanDefinitionRegistry, java.lang.Object)`
-方法注册到 BeanDefinitionRegistry 中的，继续逆推代码，分别在`AnnotatedBeanDefinitionReader`的构造函数中使用：
+方法注册到 BeanDefinitionRegistry 中的，继续逆推代码，在`AnnotatedBeanDefinitionReader`的构造函数中使用：
 
 ```java
 public AnnotatedBeanDefinitionReader(BeanDefinitionRegistry registry, Environment environment) {
@@ -147,8 +150,9 @@ protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) {
 
 ### 使用
 
-ConfigurationClassPostProcessor 是 BeanFactoryPostProcessor, BeanDefinitionRegistryPostProcessor 专门用来注册BeanDefinition，其中
-processConfigBeanDefinitions 方法用来处理 @Configuration 注解的类，即扫描 @Configuration 注解的类，并注册为 BeanDefinition
+`ConfigurationClassPostProcessor` 是 `BeanFactoryPostProcessor`, `BeanDefinitionRegistryPostProcessor` 专门用来注册
+`BeanDefinition`，其中
+`processConfigBeanDefinitions` 方法用来处理 `@Configuration` 注解的类。
 
 ```java
 public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPostProcessor {
@@ -289,7 +293,7 @@ public void processConfigBeanDefinitions(BeanDefinitionRegistry registry) {
 
 最终会调用到 `org.springframework.context.annotation.ConfigurationClassParser#doProcessConfigurationClass` 处理
 @ComponentScan、@Import 、@ComponentScans 、@ImportResource、@Bean、@PropertySource 等注解，最终所有的beanDefinition都会加载到
-BeanDefinitionRegistry 中
+`BeanDefinitionRegistry` 中
 
 ```java
 
